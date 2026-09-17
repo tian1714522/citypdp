@@ -2,7 +2,6 @@
 
 > **本仓库用途（`tian1714522/citypdp`）**：发布该项目的**可下载打包版本**——完整数据分卷压缩包与源码快照，见 [Release `dataset-v1`](https://github.com/tian1714522/citypdp/releases/tag/dataset-v1)。
 > 项目的**原始 Git 仓库**（含 Git LFS 数据、完整提交历史）为 [Laanyz/multi-scene-gnss-benchmark](https://github.com/Laanyz/multi-scene-gnss-benchmark)。
-> **数据说明：** 本仓库通过 Git LFS 发布四个场景的 Xsens 结果、KL6 软件接收机处理结果、定位基准测试文件和 NovAtel 定位结果转换文件，合计约 3.67 GiB；另提供软件园2期相机帧的 4 个分卷，合计约 5.5 GiB。其他场景的相机数据和原始中频 IQ 不随仓库分发。
 
 本项目面向**复杂城市环境下的 GNSS 多径（multipath）研究**：在软件园2期、湖边万达、五缘湾、厦禾路四个真实城市场景同步采集 GNSS 观测、参考轨迹与视觉数据，覆盖商业综合体、城市街谷、滨海开阔区等典型多径传播条件，并提供定位基准测试、应用场景分类、多径分类，以及基于相关器 I/Q 的 SAGE 多径参数估计与定位扩展代码。
 
