@@ -1,7 +1,6 @@
 # 多场景 GNSS 数据集与基准测试
 
 > **本仓库用途（`tian1714522/citypdp`）**：发布该项目的**可下载打包版本**——完整数据分卷压缩包与源码快照，见 [Release `dataset-v1`](https://github.com/tian1714522/citypdp/releases/tag/dataset-v1)。
-> 项目的**原始 Git 仓库**（含 Git LFS 数据、完整提交历史）为 [Laanyz/multi-scene-gnss-benchmark](https://github.com/Laanyz/multi-scene-gnss-benchmark)。
 
 本项目面向**复杂城市环境下的 GNSS 多径（multipath）研究**：在软件园2期、湖边万达、五缘湾、厦禾路四个真实城市场景同步采集 GNSS 观测、参考轨迹与视觉数据，覆盖商业综合体、城市街谷、滨海开阔区等典型多径传播条件，并提供定位基准测试、应用场景分类、多径分类，以及基于相关器 I/Q 的 SAGE 多径参数估计与定位扩展代码。
 
@@ -27,8 +26,7 @@
 
 | 获取方式 | 覆盖范围 |
 | --- | --- |
-| [Laanyz/multi-scene-gnss-benchmark](https://github.com/Laanyz/multi-scene-gnss-benchmark)（Git LFS） | 组成部分 1–5，约 3.67 GiB；软件园2期相机分卷约 5.5 GiB |
-| **本仓库 Release `dataset-v1`** | 全部内容的归档分卷（21 卷，40.04 GB），覆盖四个场景的数据、标签与特征文件；四个场景相机影像的独立分块（41 块，25.64 GB）；以及源码快照 |
+| **本仓库 Release `dataset-v1`** | 组成部分 1–8 的归档版本：21 个数据分卷（40.04 GB，含四个场景的数据、标签与特征文件）+ 四个场景相机影像的独立分块（41 块，25.64 GB）+ 源码快照与完整 Git 历史 |
 
 > 场景分类与多径分类所需的专用 `input/` 文件未在仓库中重复存储，可从组成部分 1 与 7 整理后放入各模块的 `input/` 目录。
 
@@ -104,32 +102,21 @@
 
 已有分类实验记录使用 Python 3.12.10。下面以 Windows PowerShell 为例，所有命令均从仓库根目录执行。新建独立环境后，通过完整解释器路径运行，无需激活环境。
 
-仓库包含 Git LFS 数据。完整克隆前先安装并初始化 Git LFS：
+项目的数据与代码通过 [Release `dataset-v1`](https://github.com/tian1714522/citypdp/releases/tag/dataset-v1) 分发，**无需 Git LFS**。
+
+获取代码（两种方式任选其一）：
 
 ```powershell
-git lfs install
-git clone https://github.com/Laanyz/multi-scene-gnss-benchmark.git
+# 方式一：下载 source-code.zip 后直接解压
+# 方式二：下载 repo-main.bundle 后还原仓库（保留 4 个提交历史）
+git clone repo-main.bundle multi-scene-gnss-benchmark
 ```
 
-只需要代码时，可跳过 LFS 数据下载：
+获取数据：把 21 个分卷 `dataset.7z.001` … `dataset.7z.021` 放到同一目录（文件名不要改），用 7-Zip 打开 `dataset.7z.001` 解压，得到四个场景的完整目录结构。
+
+相机影像也可按场景单独获取（见文末「3. 相机影像数据」）。若使用数据分卷，软件园2期相机帧位于 `数据集/软件园2期/相机数据分卷/`，合并 4 个分卷后解包：
 
 ```powershell
-$env:GIT_LFS_SKIP_SMUDGE = '1'
-git clone https://github.com/Laanyz/multi-scene-gnss-benchmark.git
-Remove-Item Env:GIT_LFS_SKIP_SMUDGE
-```
-
-克隆后也可只下载某个场景或某类数据，例如：
-
-```powershell
-cd multi-scene-gnss-benchmark
-git lfs pull --include="数据集/软件园2期/Xsens结果文件/**"
-```
-
-软件园2期相机帧以 Git LFS 分卷提供。下载 4 个分卷后，在 PowerShell 中合并并解包：
-
-```powershell
-cd multi-scene-gnss-benchmark
 cmd /c copy /b "数据集\软件园2期\相机数据分卷\software_camera.tar.part01"+"数据集\软件园2期\相机数据分卷\software_camera.tar.part02"+"数据集\软件园2期\相机数据分卷\software_camera.tar.part03"+"数据集\软件园2期\相机数据分卷\software_camera.tar.part04" "software_camera.tar"
 tar -xf software_camera.tar -C "数据集\软件园2期"
 ```
@@ -362,7 +349,7 @@ SAGE 输出继续用于主径/副径神经网络定位时，Python 训练入口�
 
 ## 数据与发布说明
 
-本仓库当前通过 Git LFS 提供以下数据子集：
+发布内容覆盖四个场景的以下数据：
 
 | 数据类别 | 场景 | 内容 |
 | --- | --- | --- |
@@ -370,11 +357,11 @@ SAGE 输出继续用于主径/副径神经网络定位时，Python 训练入口�
 | KL6 软件接收机处理结果 | 四个场景 | 跟踪、定位、RINEX 及汇总结果 |
 | 定位基准测试文件 | 四个场景 | 定位输入、LSQ/WLS 输出、统计报告与图表 |
 | NovAtel 定位结果转换文件 | 四个场景 | ASCII、RINEX 等格式转换结果 |
-| 软件园2期相机分卷 | 软件园2期 | `软二影像数据/` 下的相机 PNG 帧，下载后需先合并 4 个分卷 |
+| 相机影像数据 | 四个场景 | 同步相机 PNG 帧，按场景打包（见文末「3. 相机影像数据」） |
 
-湖边万达、五缘湾和厦禾路的相机数据，以及原始中频 IQ，未包含在 Git 仓库中。应用场景分类和 NLOS/多径分类所需的专用 `input/` 文件也没有重复存储；可从上述 KL6 结果和配套标签整理后放入各模块的 `input/` 目录。
+原始中频 IQ 未随发布内容分发。应用场景分类和多径分类所需的专用 `input/` 文件没有重复存储；可从上述 KL6 结果和配套标签整理后放入各模块的 `input/` 目录。
 
-虚拟环境 `.venv/`、下载缓存 `.downloads/`、`__pycache__/`、临时目录、重复备份和模型权重不随仓库分发。Git LFS 文件会消耗仓库所有者的 LFS 存储与下载流量；仅需代码的用户应使用上方的跳过 LFS 命令。
+虚拟环境 `.venv/`、下载缓存 `.downloads/`、`__pycache__/`、临时目录、重复备份和模型权重不随发布内容分发。
 
 仓库根目录当前未提供统一的 `LICENSE` 或正式论文引用信息。代码和数据的授权范围、第三方模块归属及引用方式，应在正式发布时由维护者明确。
 
@@ -400,7 +387,6 @@ SAGE 输出继续用于主径/副径神经网络定位时，Python 训练入口�
 - `repo-main.bundle` — 完整 Git 历史（4 个提交），可用 `git clone repo-main.bundle` 还原仓库；大型数据文件在其中为 Git LFS 指针
 
 > 大型数据文件（如 `software_camera.tar`、超过 5 MB 的 CSV / 图片）未重复打包，均已包含在上述数据分卷中。
-> 需要 Git LFS 原始数据与提交历史时，请克隆 [Laanyz/multi-scene-gnss-benchmark](https://github.com/Laanyz/multi-scene-gnss-benchmark)。
 
 ### 3. 相机影像数据（四个场景，分块上传）
 
