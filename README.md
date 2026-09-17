@@ -378,3 +378,25 @@ SAGE 输出继续用于主径/副径神经网络定位时，Python 训练入口�
 
 > 大型数据文件（如 `software_camera.tar`、超过 5 MB 的 CSV / 图片）未重复打包，均已包含在上述数据分卷中。
 > 需要 Git LFS 原始数据与提交历史时，请克隆 [Laanyz/multi-scene-gnss-benchmark](https://github.com/Laanyz/multi-scene-gnss-benchmark)。
+
+### 3. 相机影像数据（四个场景，分块上传）
+
+四个场景的相机 PNG 帧**分别打包**，可单独下载（无需下载 40 GB 数据总包）：
+
+| 场景 | 7-Zip 分卷（合并后） | 分块数 | 大小 |
+| --- | --- | ---: | ---: |
+| 软件园2期 | `camera-ruan2.7z.001` … `camera-ruan2.7z.003` | 9 | 5.47 GB |
+| 湖边万达 | `camera-wanda.7z.001` … `camera-wanda.7z.004` | 11 | 6.71 GB |
+| 五缘湾 | `camera-wuyuanwan.7z.001` … `camera-wuyuanwan.7z.004` | 12 | 7.60 GB |
+| 厦禾路 | `camera-xiahe.7z.001` … `camera-xiahe.7z.003` | 9 | 5.85 GB |
+| **合计** |  | **41** | **25.64 GB** |
+
+**下载与使用**
+
+1. 在 [Release `dataset-v1`](https://github.com/tian1714522/citypdp/releases/tag/dataset-v1) 下载某个场景的**全部分块** `camera-<场景>.7z.00X.partNN`
+2. 把分块放到同一目录，运行随附的 `merge_camera_parts.ps1`（PowerShell：`.\merge_camera_parts.ps1`）自动合并出 7z 分卷
+3. 用 [7-Zip](https://www.7-zip.org/) 打开 `camera-<场景>.7z.001` 解压
+
+**校验**：`checksums-camera.sha256.txt` 列出全部分块的 SHA-256；`manifest.json` 记录分块与 7z 分卷的对应关系。
+
+> 说明：这些相机数据**同时包含**在“1. 完整数据”的 21 个分卷内；此处是按场景拆分的便捷下载版本。
